@@ -14,8 +14,15 @@ await buildProject({
   buildDirectoryRelativeUrl: "./dist/",
   format: "commonjs",
   entryPointMap: {
-    "./main.js": "./jsenv_importmap_eslint_resolver.prod.cjs",
+    "./main.js": "./jsenv_importmap_eslint_resolver.cjs",
   },
   babelPluginMap: getBabelPluginMapForNode(),
+  externalImportUrlPatterns: {
+    "node_modules/": true,
+    // ensure this specific file is inlined
+    // otherhwise a .js would be required when would throw
+    // 'require() of ES modules is not supported'
+    "node_modules/@jsenv/import-map/src/isSpecifierForNodeCoreModule.js": false,
+  },
   buildDirectoryClean: true,
 })

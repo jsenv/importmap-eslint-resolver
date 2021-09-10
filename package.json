@@ -1,8 +1,7 @@
 {
   "name": "@jsenv/importmap-eslint-resolver",
-  "version": "0.0.1",
-  "private": true,
-  "description": "Package description",
+  "version": "5.1.1",
+  "description": "importmap resolution for ESLint",
   "license": "MIT",
   "author": {
     "name": "dmail",
@@ -36,7 +35,7 @@
     "eslint-check": "node ./node_modules/eslint/bin/eslint.js . --ext=.js,.mjs",
     "generate-importmap": "node ./script/importmap/generate_importmap.mjs",
     "measure-performances": "node ./script/performance/generate_performance_report.mjs --local",
-    "dist": "npm run build-dev && npm run build-prod",
+    "dist": "npm run build",
     "build": "node --experimental-import-meta-resolve ./script/build/build.mjs",
     "test": "node ./script/test/test.mjs",
     "test-with-coverage": "npm run test -- --coverage",
@@ -47,7 +46,11 @@
     "prepublishOnly": "node ./script/publish/remove_postinstall.mjs && npm run dist",
     "postpublish": "node ./script/publish/restore_postinstall.mjs"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@jsenv/filesystem": "2.1.1",
+    "@jsenv/importmap": "1.1.0",
+    "@jsenv/logger": "4.0.1"
+  },
   "devDependencies": {
     "@babel/core": "7.15.5",
     "@babel/eslint-parser": "7.15.4",
