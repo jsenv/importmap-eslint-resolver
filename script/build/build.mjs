@@ -9,16 +9,12 @@ import { buildProject, getBabelPluginMapForNode } from "@jsenv/core"
 
 import * as jsenvConfig from "../../jsenv.config.mjs"
 
-const isProduction = process.execArgv.some((arg) => arg.includes("--conditions=production"))
-
 await buildProject({
   ...jsenvConfig,
-  buildDirectoryRelativeUrl: isProduction ? "./dist/prod/" : "./dist/dev/",
+  buildDirectoryRelativeUrl: "./dist/",
   format: "commonjs",
   entryPointMap: {
-    "./main.js": isProduction
-      ? "./template_node_package.prod.cjs"
-      : "./template_node_package.dev.cjs",
+    "./main.js": "./jsenv_importmap_eslint_resolver.prod.cjs",
   },
   babelPluginMap: getBabelPluginMapForNode(),
   buildDirectoryClean: true,

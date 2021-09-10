@@ -17,14 +17,16 @@
 
 export const generatePerformanceReport = async () => {
   const { measureImport } = await import("./measure_import/measure_import.mjs")
-  const { measureNpmTarball } = await import("./measure_npm_tarball/measure_npm_tarball.mjs")
+  const { measureNpmTarball } = await import(
+    "./measure_npm_tarball/measure_npm_tarball.mjs"
+  )
 
   const importMetrics = await measureImport()
   const npmTarballMetrics = await measureNpmTarball()
 
   return {
     groups: {
-      "@jsenv/template-node-package package": {
+      "@jsenv/importmap-eslint-resolver package": {
         ...importMetrics,
         ...npmTarballMetrics,
       },

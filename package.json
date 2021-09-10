@@ -1,5 +1,5 @@
 {
-  "name": "@jsenv/template-node-package",
+  "name": "@jsenv/importmap-eslint-resolver",
   "version": "0.0.1",
   "private": true,
   "description": "Package description",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jsenv/jsenv-template-node-package"
+    "url": "https://github.com/jsenv/importmap-eslint-resolver"
   },
   "engines": {
     "node": ">=14.17.0"
@@ -23,33 +23,21 @@
   "exports": {
     ".": {
       "import": "./main.js",
-      "require": {
-        "production": "./dist/prod/template_node_package.prod.cjs",
-        "default": "./dist/dev/template_node_package.dev.cjs"
-      }
+      "require": "./dist/jsenv_importmap_eslint_resolver.cjs"
     },
     "./*": "./*"
-  },
-  "imports": {
-    "#env": {
-      "production": "./env.prod.js",
-      "default": "./env.dev.js"
-    }
   },
   "files": [
     "/dist/",
     "/src/",
-    "/main.js",
-    "/env.dev.js",
-    "/env.prod.js"
+    "/main.js"
   ],
   "scripts": {
     "eslint-check": "node ./node_modules/eslint/bin/eslint.js . --ext=.js,.mjs",
     "generate-importmap": "node ./script/importmap/generate_importmap.mjs",
     "measure-performances": "node ./script/performance/generate_performance_report.mjs --local",
     "dist": "npm run build-dev && npm run build-prod",
-    "build-dev": "node --experimental-import-meta-resolve ./script/build/build.mjs",
-    "build-prod": "node --conditions=production --experimental-import-meta-resolve ./script/build/build.mjs",
+    "build": "node --experimental-import-meta-resolve ./script/build/build.mjs",
     "test": "node ./script/test/test.mjs",
     "test-with-coverage": "npm run test -- --coverage",
     "prettier-format": "node ./script/prettier/prettier_format.mjs",
@@ -75,6 +63,6 @@
     "@jsenv/prettier-check-project": "5.6.1",
     "eslint": "7.32.0",
     "eslint-plugin-import": "2.24.2",
-    "prettier": "2.3.2"
+    "prettier": "2.4.0"
   }
 }
