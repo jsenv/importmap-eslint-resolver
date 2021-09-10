@@ -1,29 +1,11 @@
 # importmap ESLint resolver [![npm package](https://img.shields.io/npm/v/@jsenv/importmap-eslint-resolver.svg?logo=npm&label=package)](https://www.npmjs.com/package/@jsenv/importmap-eslint-resolver) [![github main](https://github.com/jsenv/importmap-eslint-resolver/workflows/main/badge.svg)](https://github.com/jsenv/importmap-eslint-resolver/actions?workflow=main) [![codecov coverage](https://codecov.io/gh/jsenv/importmap-eslint-resolver/branch/master/graph/badge.svg)](https://codecov.io/gh/jsenv/importmap-eslint-resolver)
 
-Import maps are used to remap import to somewhere else. For instance the following importmap allows to remap `"foo"` to `"./foo.js"`.
-
-```json
-{
-  "imports": {
-    "foo": "./foo.js"
-  }
-}
-```
-
-By providing this importmap to the browser or Node.js, js imports resolution becomes aware of the importmap file remappings. You can write the following js file and it would search for file at `"./foo.js"`.
-
-```js
-import { value } from "foo"
-
-console.log(value)
-```
-
-If you use `import/no-unresolved` rule from `eslint-plugin-import` these imports are reported as not resolved as shown in images below.
+If you use an importmap file and `import/no-unresolved` rule from `eslint-plugin-import`, some imports are reported as not resolved as shown in images below.
 
 ![screenshot import not resolved in vscode](./docs/vscode-import-not-resolved.png)</br >
 ![screenshot eslint error in vscode](./docs/eslint-error-in-vscode.png)
 
-This is why `@jsenv/importmap-eslint-resolver` exists: to make `import/no-unresolved` compatible with importmap file.
+`@jsenv/importmap-eslint-resolver` exists to make `import/no-unresolved` compatible with importmap file.
 
 — see [ESLint website](https://eslint.org)<br />
 — see [eslint-plugin-import on github](https://github.com/benmosher/eslint-plugin-import)<br />
@@ -68,6 +50,8 @@ module.exports = {
   },
 }
 ```
+
+At this stage ESLint takes your importmap into account when trying to resolve imports. You can read the rest of this document to go further.
 
 # Configuration
 
