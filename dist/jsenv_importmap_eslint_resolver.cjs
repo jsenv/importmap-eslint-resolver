@@ -5,8 +5,17 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var node_fs = require('fs');
 var logger = require('@jsenv/logger');
 var filesystem = require('@jsenv/filesystem');
-var isSpecifierForNodeCoreModule_js = require('@jsenv/importmap/src/isSpecifierForNodeCoreModule.js');
 var importmap = require('@jsenv/importmap');
+
+// https://github.com/browserify/resolve/blob/a09a2e7f16273970be4639313c83b913daea15d7/lib/core.json#L1
+// https://nodejs.org/api/modules.html#modules_module_builtinmodules
+// https://stackoverflow.com/a/35825896
+// https://github.com/browserify/resolve/blob/master/lib/core.json#L1
+const isSpecifierForNodeCoreModule = specifier => {
+  return specifier.startsWith("node:") || NODE_CORE_MODULE_SPECIFIERS.includes(specifier);
+};
+const NODE_CORE_MODULE_SPECIFIERS = ["assert", "assert/strict", "async_hooks", "buffer_ieee754", "buffer", "child_process", "cluster", "console", "constants", "crypto", "_debugger", "dgram", "dns", "domain", "events", "freelist", "fs", "fs/promises", "_http_agent", "_http_client", "_http_common", "_http_incoming", "_http_outgoing", "_http_server", "http", "http2", "https", "inspector", "_linklist", "module", "net", "node-inspect/lib/_inspect", "node-inspect/lib/internal/inspect_client", "node-inspect/lib/internal/inspect_repl", "os", "path", "perf_hooks", "process", "punycode", "querystring", "readline", "repl", "smalloc", "_stream_duplex", "_stream_transform", "_stream_wrap", "_stream_passthrough", "_stream_readable", "_stream_writable", "stream", "stream/promises", "string_decoder", "sys", "timers", "_tls_common", "_tls_legacy", "_tls_wrap", "tls", "trace_events", "tty", "url", "util", "v8/tools/arguments", "v8/tools/codemap", "v8/tools/consarray", "v8/tools/csvparser", "v8/tools/logreader", "v8/tools/profile_view", "v8/tools/splaytree", "v8", "vm", "worker_threads", "zlib", // global is special
+"global"];
 
 const readImportMapFromFile = ({
   logger,
@@ -132,7 +141,7 @@ ${file}
 --- project directory path ---
 ${filesystem.urlToFileSystemPath(projectDirectoryUrl)}`);
 
-  if (node && isSpecifierForNodeCoreModule_js.isSpecifierForNodeCoreModule(source)) {
+  if (node && isSpecifierForNodeCoreModule(source)) {
     logger$1.debug(`-> native node module`);
     return {
       found: true,
