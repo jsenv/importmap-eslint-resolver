@@ -63,7 +63,7 @@ ${importMapFilePath}`)
     throw e
   }
 
-  return normalizeImportMap(importMap, projectDirectoryUrl)
+  return normalizeImportMap(importMap, importMapFileUrl)
 }
 
 const applyUrlResolution = (specifier, importer) => {

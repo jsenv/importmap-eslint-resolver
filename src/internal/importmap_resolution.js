@@ -4,7 +4,13 @@ import { readImportMapFromFile } from "./readImportMapFromFile.js"
 
 export const applyImportMapResolution = (
   specifier,
-  { logger, projectDirectoryUrl, importMapFileRelativeUrl, importDefaultExtension, importer },
+  {
+    logger,
+    projectDirectoryUrl,
+    importMapFileRelativeUrl,
+    importDefaultExtension,
+    importer,
+  },
 ) => {
   const importMap = readImportMapFromFile({
     logger,

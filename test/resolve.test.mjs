@@ -20,9 +20,13 @@ const tempDirectoryUrl = resolveUrl("./temp/", import.meta.url)
     tempDirectoryUrl,
   )
 
-  const actual = resolver.resolve("/file.js", urlToFileSystemPath(importerFileUrl), {
-    projectDirectoryUrl: tempDirectoryUrl,
-  })
+  const actual = resolver.resolve(
+    "/file.js",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      projectDirectoryUrl: tempDirectoryUrl,
+    },
+  )
   const expected = {
     found: false,
     path: urlToFileSystemPath(resolvedFileUrl),
@@ -111,7 +115,10 @@ const tempDirectoryUrl = resolveUrl("./temp/", import.meta.url)
 // bare specifier remapped by scope
 {
   await ensureEmptyDirectory(tempDirectoryUrl)
-  const importerFileUrl = resolveUrl("node_modules/use-scoped-foo/index.js", tempDirectoryUrl)
+  const importerFileUrl = resolveUrl(
+    "node_modules/use-scoped-foo/index.js",
+    tempDirectoryUrl,
+  )
   const resolvedFileUrl = resolveUrl(
     "node_modules/use-scoped-foo/node_modules/foo/index.js",
     tempDirectoryUrl,
@@ -170,9 +177,13 @@ const tempDirectoryUrl = resolveUrl("./temp/", import.meta.url)
   await writeFile(importerFileUrl)
   await writeFile(resolvedFileUrl)
 
-  const actual = resolver.resolve("./file", urlToFileSystemPath(importerFileUrl), {
-    projectDirectoryUrl,
-  })
+  const actual = resolver.resolve(
+    "./file",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      projectDirectoryUrl,
+    },
+  )
   const expected = {
     found: true,
     path: urlToFileSystemPath(resolvedFileUrl),
@@ -189,11 +200,15 @@ if (process.platform === "darwin" || process.platform === "linux") {
   await writeFile(importerFileUrl)
   await writeFile(resolvedFileUrl)
 
-  const actual = resolver.resolve("./File.js", urlToFileSystemPath(importerFileUrl), {
-    projectDirectoryUrl,
-    caseSensitive: true,
-    logLevel: "error",
-  })
+  const actual = resolver.resolve(
+    "./File.js",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      projectDirectoryUrl,
+      caseSensitive: true,
+      logLevel: "error",
+    },
+  )
   const expected = {
     found: false,
     path: urlToFileSystemPath(resolveUrl("project/File.js", tempDirectoryUrl)),
@@ -210,9 +225,13 @@ if (process.platform === "darwin" || process.platform === "linux") {
   await writeFile(importerFileUrl)
   await writeFile(resolvedFileUrl)
 
-  const actual = resolver.resolve("../file", urlToFileSystemPath(importerFileUrl), {
-    projectDirectoryUrl,
-  })
+  const actual = resolver.resolve(
+    "../file",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      projectDirectoryUrl,
+    },
+  )
   const expected = {
     found: true,
     path: urlToFileSystemPath(resolvedFileUrl),
@@ -229,9 +248,13 @@ if (process.platform === "darwin" || process.platform === "linux") {
   await writeFile(importerFileUrl)
   await writeFile(resolvedFileUrl)
 
-  const actual = resolver.resolve("../file", urlToFileSystemPath(importerFileUrl), {
-    projectDirectoryUrl,
-  })
+  const actual = resolver.resolve(
+    "../file",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      projectDirectoryUrl,
+    },
+  )
   const expected = {
     found: true,
     path: urlToFileSystemPath(resolvedFileUrl),
@@ -248,13 +271,53 @@ if (process.platform === "darwin" || process.platform === "linux") {
   await writeFile(importerFileUrl)
   await writeFile(resolvedFileUrl)
 
-  const actual = resolver.resolve("../file", urlToFileSystemPath(importerFileUrl), {
-    logLevel: "error",
-    projectDirectoryUrl,
-    ignoreOutside: true,
-  })
+  const actual = resolver.resolve(
+    "../file",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      logLevel: "error",
+      projectDirectoryUrl,
+      ignoreOutside: true,
+    },
+  )
   const expected = {
     found: false,
+    path: urlToFileSystemPath(resolvedFileUrl),
+  }
+  assert({ actual, expected })
+}
+
+// an importmap file inside a directory
+{
+  await ensureEmptyDirectory(tempDirectoryUrl)
+  const importerFileUrl = resolveUrl("project/importer", tempDirectoryUrl)
+  const resolvedFileUrl = resolveUrl("project/file.js", tempDirectoryUrl)
+  const importMapFileRelativeUrl = "project/test.importmap"
+  const importmapFileUrl = resolveUrl(
+    importMapFileRelativeUrl,
+    tempDirectoryUrl,
+  )
+  await writeFile(
+    importmapFileUrl,
+    JSON.stringify({
+      imports: {
+        "./file": "./file.js",
+      },
+    }),
+  )
+  await writeFile(resolvedFileUrl)
+
+  const actual = resolver.resolve(
+    "./file",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      logLevel: "error",
+      projectDirectoryUrl: tempDirectoryUrl,
+      importMapFileRelativeUrl,
+    },
+  )
+  const expected = {
+    found: true,
     path: urlToFileSystemPath(resolvedFileUrl),
   }
   assert({ actual, expected })

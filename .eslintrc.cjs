@@ -15,11 +15,10 @@ const {
 const eslintConfig = composeEslintConfig(
   eslintConfigBase,
 
-  // use "@babel/eslint-parser" until top level await is supported by ESLint default parser
+  // Enables top level await
   {
-    parser: "@babel/eslint-parser",
     parserOptions: {
-      requireConfigFile: false,
+      ecmaVersion: 2022,
     },
   },
 
@@ -68,6 +67,7 @@ const eslintConfig = composeEslintConfig(
       __filename: "off",
       __dirname: "off",
       require: "off",
+      exports: "off",
     },
     overrides: [
       {
@@ -80,6 +80,7 @@ const eslintConfig = composeEslintConfig(
           __filename: true,
           __dirname: true,
           require: true,
+          exports: true,
         },
 
         // inside *.cjs files, use commonjs module resolution

@@ -5,12 +5,15 @@
  * See https://github.com/jsenv/performance-impact
  */
 
-import { reportPerformanceImpact, readGitHubWorkflowEnv } from "@jsenv/performance-impact"
+import {
+  reportPerformanceImpact,
+  readGitHubWorkflowEnv,
+} from "@jsenv/performance-impact"
 
-reportPerformanceImpact({
+await reportPerformanceImpact({
   ...readGitHubWorkflowEnv(),
   logLevel: "debug",
   installCommand: "npm install",
-  moduleGeneratingPerformanceReportRelativeUrl:
-    "./script/performance/generate_performance_report.mjs",
+  performanceReportPath:
+    "./script/performance/performance_report.mjs#performanceReport",
 })
