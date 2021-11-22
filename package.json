@@ -36,11 +36,11 @@
     "eslint-check": "node ./node_modules/eslint/bin/eslint.js . --ext=.js,.mjs",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
+    "test": "node ./script/test/test.mjs",
+    "test-with-coverage": "npm run test -- --coverage",
     "performance-report": "node ./script/performance/performance_report.mjs --local",
     "dist": "npm run build",
     "build": "node --experimental-import-meta-resolve ./script/build/build.mjs",
-    "test": "node ./script/test/test.mjs",
-    "test-with-coverage": "npm run test -- --coverage",
     "postinstall": "npm run importmap-generate",
     "prepublishOnly": "node ./script/publish/remove_postinstall.mjs && npm run dist",
     "postpublish": "node ./script/publish/restore_postinstall.mjs"
