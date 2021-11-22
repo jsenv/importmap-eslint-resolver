@@ -72,7 +72,7 @@ ${importMapFilePath}`);
     throw e;
   }
 
-  return importmap.normalizeImportMap(importMap, projectDirectoryUrl);
+  return importmap.normalizeImportMap(importMap, importMapFileUrl);
 };
 
 const applyUrlResolution = (specifier, importer) => {
