@@ -87,7 +87,7 @@ ${urlToFileSystemPath(projectDirectoryUrl)}`)
 
     if (importUrl.startsWith("node:")) {
       logger.warn(
-        `-> ${source} uses node scheme and node parameter is disabled`,
+        `Warning: ${file} is using "node" scheme but "node" parameter is not enabled (importing "${source}")`,
       )
     }
 
