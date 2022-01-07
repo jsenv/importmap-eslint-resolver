@@ -185,7 +185,7 @@ ${filesystem.urlToFileSystemPath(projectDirectoryUrl)}`);
     }
 
     if (importUrl.startsWith("node:")) {
-      logger$1.warn(`-> ${source} uses node scheme and node parameter is disabled`);
+      logger$1.warn(`Warning: ${file} is using "node" scheme but "node" parameter is not enabled (importing "${source}")`);
     }
 
     logger$1.debug(`-> consider not found because of scheme ${importUrl}`);
