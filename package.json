@@ -26,41 +26,38 @@
     },
     "./*": "./*"
   },
+  "main": "./main.js",
   "files": [
     "/dist/",
     "/src/",
     "/main.js"
   ],
   "scripts": {
-    "importmap-generate": "node ./script/importmap/importmap_generate.mjs",
-    "eslint-check": "node ./node_modules/eslint/bin/eslint.js . --ext=.js,.mjs",
-    "prettier-check": "prettier --check .",
-    "prettier-write": "prettier --write .",
+    "importmap": "node ./script/importmap/importmap.mjs",
+    "eslint": "node ./node_modules/eslint/bin/eslint.js . --ext=.js,.mjs",
     "test": "node ./script/test/test.mjs",
     "test-with-coverage": "npm run test -- --coverage",
     "performance-report": "node ./script/performance/performance_report.mjs --local",
     "dist": "npm run build",
     "build": "node --experimental-import-meta-resolve ./script/build/build.mjs",
-    "postinstall": "npm run importmap-generate",
-    "prepublishOnly": "node ./script/publish/remove_postinstall.mjs && npm run dist",
-    "postpublish": "node ./script/publish/restore_postinstall.mjs"
+    "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@jsenv/filesystem": "2.1.1",
+    "@jsenv/filesystem": "2.7.0",
     "@jsenv/importmap": "1.2.0",
     "@jsenv/logger": "4.0.1"
   },
   "devDependencies": {
-    "@jsenv/assert": "2.3.2",
-    "@jsenv/core": "23.11.0",
+    "@jsenv/assert": "2.4.1",
+    "@jsenv/core": "25.2.1",
     "@jsenv/eslint-config": "16.0.9",
     "@jsenv/github-release-package": "1.2.3",
-    "@jsenv/importmap-eslint-resolver": "5.1.2",
-    "@jsenv/importmap-node-module": "2.8.0",
+    "@jsenv/importmap-eslint-resolver": "5.2.2",
+    "@jsenv/importmap-node-module": "5.1.0",
     "@jsenv/package-publish": "1.6.2",
     "@jsenv/performance-impact": "2.2.1",
-    "eslint": "8.3.0",
-    "eslint-plugin-import": "2.25.3",
-    "prettier": "2.4.1"
+    "eslint": "8.7.0",
+    "eslint-plugin-import": "2.25.4",
+    "prettier": "2.5.1"
   }
 }

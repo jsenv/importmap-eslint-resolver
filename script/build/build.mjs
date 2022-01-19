@@ -13,15 +13,14 @@ await buildProject({
   projectDirectoryUrl,
   buildDirectoryRelativeUrl: "./dist/",
   format: "commonjs",
-  entryPointMap: {
-    "./main.js": "./jsenv_importmap_eslint_resolver.cjs",
+  entryPoints: {
+    "./main.js": "jsenv_importmap_eslint_resolver.cjs",
   },
-  externalImportUrlPatterns: {
-    "node_modules/": true,
+  preservedUrls: {
     // ensure this specific file is inlined
     // otherhwise a .js would be required when would throw
     // 'require() of ES modules is not supported'
-    "node_modules/@jsenv/importmap/src/isSpecifierForNodeCoreModule.js": false,
+    "./node_modules/@jsenv/importmap/src/isSpecifierForNodeCoreModule.js": false,
   },
   runtimeSupport: {
     node: "14.7.0",

@@ -2,10 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var node_fs = require('fs');
-var logger = require('@jsenv/logger');
-var filesystem = require('@jsenv/filesystem');
-var importmap = require('@jsenv/importmap');
+const logger = require('@jsenv/logger');
+const filesystem = require('@jsenv/filesystem');
+const importmap = require('@jsenv/importmap');
+const node_fs = require('fs');
 
 // https://github.com/browserify/resolve/blob/a09a2e7f16273970be4639313c83b913daea15d7/lib/core.json#L1
 // https://nodejs.org/api/modules.html#modules_module_builtinmodules
@@ -124,7 +124,6 @@ const resolve = (source, file, {
   projectDirectoryUrl,
   importMapFileRelativeUrl,
   caseSensitive = true,
-  ignoreOutside = false,
   importDefaultExtension = false,
   node = false
 }) => {
@@ -174,7 +173,6 @@ ${filesystem.urlToFileSystemPath(projectDirectoryUrl)}`);
       return handleFileUrl(importUrl, {
         logger: logger$1,
         projectDirectoryUrl,
-        ignoreOutside,
         caseSensitive
       });
     }
@@ -199,54 +197,43 @@ ${filesystem.urlToFileSystemPath(projectDirectoryUrl)}`);
   }
 };
 
-const handleFileUrl = (importUrl, {
+const handleFileUrl = (fileUrl, {
   logger,
-  projectDirectoryUrl,
-  ignoreOutside,
   caseSensitive
 }) => {
-  const importFilePath = filesystem.urlToFileSystemPath(importUrl);
+  const realFileUrl = filesystem.getRealFileSystemUrlSync(fileUrl, {
+    // we don't follow link because we care only about the theoric file location
+    // without this realFileUrl and fileUrl can be different
+    // and we would log the warning about case sensitivity
+    followLink: false
+  });
+  const filePath = filesystem.urlToFileSystemPath(fileUrl);
 
-  if (ignoreOutside && !filesystem.urlIsInsideOf(importUrl, projectDirectoryUrl)) {
-    logger.warn(`ignoring import outside project
---- import file ---
-${importFilePath}
---- project directory ---
-${filesystem.urlToFileSystemPath(projectDirectoryUrl)}
-`);
+  if (!realFileUrl) {
+    logger.debug(`-> file not found at ${fileUrl}`);
     return {
       found: false,
-      path: importFilePath
+      path: filePath
     };
   }
 
-  if (!pathLeadsToFile(importFilePath)) {
-    logger.debug(`-> file not found at ${importUrl}`);
-    return {
-      found: false,
-      path: importFilePath
-    };
-  }
+  const realFilePath = filesystem.urlToFileSystemPath(realFileUrl);
 
-  if (caseSensitive) {
-    const importFileRealPath = node_fs.realpathSync.native(importFilePath);
-
-    if (importFileRealPath !== importFilePath) {
-      logger.warn(`WARNING: file found at ${importFilePath} but would not be found on a case sensitive filesystem.
-The real file path is ${importFileRealPath}.
+  if (caseSensitive && realFileUrl !== fileUrl) {
+    logger.warn(`WARNING: file found for ${filePath} but would not be found on a case sensitive filesystem.
+The real file path is ${realFilePath}.
 You can choose to disable this warning by disabling case sensitivity.
 If you do so keep in mind windows users would not find that file.`);
-      return {
-        found: false,
-        path: importFilePath
-      };
-    }
+    return {
+      found: false,
+      path: realFilePath
+    };
   }
 
-  logger.debug(`-> found file at ${importUrl}`);
+  logger.debug(`-> found file at ${realFilePath}`);
   return {
     found: true,
-    path: importFilePath
+    path: realFilePath
   };
 };
 
@@ -264,19 +251,6 @@ const handleRemainingUrl = () => {
     found: false,
     path: null
   };
-};
-
-const pathLeadsToFile = path => {
-  try {
-    const stats = node_fs.statSync(path);
-    return stats.isFile();
-  } catch (e) {
-    if (e && e.code === "ENOENT") {
-      return false;
-    }
-
-    throw e;
-  }
 };
 
 exports.interfaceVersion = interfaceVersion;
