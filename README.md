@@ -140,72 +140,6 @@ module.exports = {
 }
 ```
 
-# Advanced configuration example
-
-In a project mixing files written for the browser AND for Node.js you should tell ESLint which are which. This is possible thanks to `overrides` documented on ESLint in [Configuration Based on Glob Patterns](https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-based-on-glob-patterns).
-
-`.eslintrc.cjs`
-
-```js
-const eslintConfig = {
-  plugins: ["import"],
-  overrides: [],
-}
-
-// by default consider files as written for browsers
-Object.assign(eslintConfig, {
-  env: {
-    es6: true,
-    browser: true,
-    node: false,
-  },
-  settings: {
-    "import/resolver": {
-      "@jsenv/importmap-eslint-resolver": {
-        projectDirectoryUrl: __dirname,
-        importMapFileRelativeUrl: "./project.importmap",
-      },
-    },
-  },
-})
-
-// but consider files inside script/ as written for Node.js
-eslintConfig.overrides.push({
-  files: ["script/**/*.js"],
-  env: {
-    es6: true,
-    browser: false,
-    node: true,
-  },
-  settings: {
-    "import/resolver": {
-      "@jsenv/importmap-eslint-resolver": {
-        node: true,
-      },
-    },
-  },
-})
-
-// and any file ending with .cjs as written for Node.js with commonjs module resolution
-eslintConfig.overrides.push({
-  files: ["**/*.cjs"],
-  env: {
-    es6: true,
-    browser: false,
-    node: true,
-  },
-  settings: {
-    "import/resolver": {
-      node: true,
-    },
-  },
-})
-
-module.exports = eslintConfig
-```
-
-# About
-
 ## Case sensitivity
 
 This resolver is case sensitive by default: An import is found only if the import path and actual file on the filesystem have same case.
@@ -279,3 +213,67 @@ And every bare specifier must have a mapping or it cannot be resolved.
 To fix this either add a mapping or put explicitely `"./specifier.js"`.
 
 Please note that `"specifier.js"` is also a bare specifier. You should write `"./specifier.js"` instead.
+
+# Advanced configuration example
+
+In a project mixing files written for the browser AND for Node.js you should tell ESLint which are which. This is possible thanks to `overrides` documented on ESLint in [Configuration Based on Glob Patterns](https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-based-on-glob-patterns).
+
+`.eslintrc.cjs`
+
+```js
+const eslintConfig = {
+  plugins: ["import"],
+  overrides: [],
+}
+
+// by default consider files as written for browsers
+Object.assign(eslintConfig, {
+  env: {
+    es6: true,
+    browser: true,
+    node: false,
+  },
+  settings: {
+    "import/resolver": {
+      "@jsenv/importmap-eslint-resolver": {
+        projectDirectoryUrl: __dirname,
+        importMapFileRelativeUrl: "./project.importmap",
+      },
+    },
+  },
+})
+
+// but consider files inside script/ as written for Node.js
+eslintConfig.overrides.push({
+  files: ["script/**/*.js"],
+  env: {
+    es6: true,
+    browser: false,
+    node: true,
+  },
+  settings: {
+    "import/resolver": {
+      "@jsenv/importmap-eslint-resolver": {
+        node: true,
+      },
+    },
+  },
+})
+
+// and any file ending with .cjs as written for Node.js with commonjs module resolution
+eslintConfig.overrides.push({
+  files: ["**/*.cjs"],
+  env: {
+    es6: true,
+    browser: false,
+    node: true,
+  },
+  settings: {
+    "import/resolver": {
+      node: true,
+    },
+  },
+})
+
+module.exports = eslintConfig
+```
