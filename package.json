@@ -1,6 +1,6 @@
 {
   "name": "@jsenv/importmap-eslint-resolver",
-  "version": "5.2.4",
+  "version": "5.2.5",
   "description": "importmap resolution for ESLint",
   "license": "MIT",
   "author": {
@@ -40,7 +40,8 @@
     "performance-report": "node ./script/performance/performance_report.mjs --local",
     "dist": "npm run build",
     "build": "node --experimental-import-meta-resolve ./script/build/build.mjs",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "prepublishOnly": "npm run dist"
   },
   "dependencies": {
     "@jsenv/filesystem": "2.7.1",
