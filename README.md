@@ -65,6 +65,8 @@ At this stage ESLint takes your importmap into account when trying to resolve im
 
 This is the **default** behaviour, it can be configured to **match what you need**.
 
+A typical project contains files written for browser AND node.js, you can read the [Advanced configuration example](#Advanced-configuration-example) to see how ESLint can be configured in these projects.
+
 ## Case sensitivity
 
 This resolver is case sensitive by default: An import is found only if the import path and actual file on the filesystem have same case.
@@ -130,31 +132,30 @@ When an importmap is used, this resolver gives a special treatment to "bare spec
 
 ## Node import resolution
 
-File written for Node.js should enable "node" parameter. The resolver will consider node core modules (path, fs, url, etc) as found.
+- For files written for Node.js with `import`:
 
-_in \_eslintrc.cjs_:
+  You can reuse importmap as explained in [Browser import resolution](#Browser-import-resolution). This is because there is no resolver implementing [node esm resolution algorithm](https://nodejs.org/dist/latest-v16.x/docs/api/esm.html#esm_resolution_algorithm) for now.
 
-```diff
-module.exports = {
-  plugins: ["import"],
-  settings: {
-    "import/resolver": {
-      "@jsenv/importmap-eslint-resolver": {
-        projectDirectoryUrl: __dirname,
-+       node: true,
+  You should also tell the resolver to consider node core modules (path, fs, url, ...) as found using "node: true";
+
+  _in \_eslintrc.cjs_:
+
+  ```diff
+  module.exports = {
+    plugins: ["import"],
+    settings: {
+      "import/resolver": {
+        "@jsenv/importmap-eslint-resolver": {
+          projectDirectoryUrl: __dirname,
+          importMapFileRelativeUrl: "./project.importmap",
+  +       node: true,
+        },
       },
     },
-  },
-}
-```
+  }
+  ```
 
-If your file is written in CommonJS you can enable
-
-- If you file is written with `import`
-
-  Use an importmap as explained in [Browser import resolution](#Browser-import-resolution). This is because there is no resolver implementing [node esm resolution algorithm](https://nodejs.org/dist/latest-v16.x/docs/api/esm.html#esm_resolution_algorithm) for now.
-
-- If your file is written with `require`:
+- For files written for Node.js with `require`:
 
   Enable Node CommonJS resolution using "node" resolver in your ESLint config file.
 
@@ -173,16 +174,15 @@ If your file is written in CommonJS you can enable
 
 # Advanced configuration example
 
-In a project mixing files written for the browser AND for Node.js you should tell ESLint which are which. This is possible thanks to `overrides` documented on ESLint in [Configuration Based on Glob Patterns](https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-based-on-glob-patterns).
+In a project mixing files written for the browser AND for Node.js you should tell ESLint which are which. This is possible thanks to "overrides" documented on ESLint in [Configuration Based on Glob Patterns](https://eslint.org/docs/user-guide/configuring/configuration-files#configuration-based-on-glob-patterns).
 
-`.eslintrc.cjs`
+_eslintrc.cjs_:
 
 ```js
 const eslintConfig = {
   plugins: ["import"],
   overrides: [],
 }
-
 // by default consider files as written for browsers
 Object.assign(eslintConfig, {
   env: {
@@ -199,7 +199,6 @@ Object.assign(eslintConfig, {
     },
   },
 })
-
 // but consider files inside script/ as written for Node.js
 eslintConfig.overrides.push({
   files: ["script/**/*.js"],
@@ -216,7 +215,6 @@ eslintConfig.overrides.push({
     },
   },
 })
-
 // and any file ending with .cjs as written for Node.js with commonjs module resolution
 eslintConfig.overrides.push({
   files: ["**/*.cjs"],
@@ -231,7 +229,6 @@ eslintConfig.overrides.push({
     },
   },
 })
-
 module.exports = eslintConfig
 ```
 
