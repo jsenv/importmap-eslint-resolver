@@ -19,7 +19,6 @@ const tempDirectoryUrl = resolveUrl("./temp/", import.meta.url)
     resolveUrl("/file.js", tempDirectoryUrl),
     tempDirectoryUrl,
   )
-
   const actual = resolver.resolve(
     "/file.js",
     urlToFileSystemPath(importerFileUrl),
@@ -30,6 +29,26 @@ const tempDirectoryUrl = resolveUrl("./temp/", import.meta.url)
   const expected = {
     found: false,
     path: urlToFileSystemPath(resolvedFileUrl),
+  }
+  assert({ actual, expected })
+}
+
+// import containing query param
+{
+  await ensureEmptyDirectory(tempDirectoryUrl)
+  const importerFileUrl = resolveUrl("main.js", tempDirectoryUrl)
+  const fileUrl = resolveUrl("./file.js", tempDirectoryUrl)
+  await writeFile(fileUrl)
+  const actual = resolver.resolve(
+    "./file.js?foo=bar",
+    urlToFileSystemPath(importerFileUrl),
+    {
+      projectDirectoryUrl: tempDirectoryUrl,
+    },
+  )
+  const expected = {
+    found: true,
+    path: urlToFileSystemPath(fileUrl),
   }
   assert({ actual, expected })
 }

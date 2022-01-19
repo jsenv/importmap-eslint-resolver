@@ -90,6 +90,7 @@ ${urlToFileSystemPath(projectDirectoryUrl)}`)
 }
 
 const handleFileUrl = (fileUrl, { logger, caseSensitive }) => {
+  fileUrl = `file://${new URL(fileUrl).pathname}` // remove query params from url
   const realFileUrl = getRealFileSystemUrlSync(fileUrl, {
     // we don't follow link because we care only about the theoric file location
     // without this realFileUrl and fileUrl can be different
