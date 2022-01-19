@@ -199,9 +199,9 @@ Object.assign(eslintConfig, {
     },
   },
 })
-// but consider files inside script/ as written for Node.js
+// but for node and using Node ES module resolution algorithm on "*.mjs"
 eslintConfig.overrides.push({
-  files: ["script/**/*.js"],
+  files: ["**/*.mjs"],
   env: {
     es6: true,
     browser: false,
@@ -215,7 +215,7 @@ eslintConfig.overrides.push({
     },
   },
 })
-// and any file ending with .cjs as written for Node.js with commonjs module resolution
+// and for node and using Node CommonJS resolution on "*.cjs"
 eslintConfig.overrides.push({
   files: ["**/*.cjs"],
   env: {
