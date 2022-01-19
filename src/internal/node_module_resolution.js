@@ -17,7 +17,6 @@ export const applyNodeModuleResolution = (
   if (moduleSystem === "cjs") {
     return applyCommonJsModuleResolution(specifier, { importer })
   }
-
   logger.warn(`Cannot resolve specifier: ESM node module resolution algorithm is not implemented.
 --- specifier ---
 ${specifier}
@@ -33,7 +32,6 @@ const determineModuleSystem = (url, projectDirectoryUrl) => {
   const inputTypeArgv = process.execArgv.find((argv) =>
     argv.startsWith("--input-type="),
   )
-
   if (inputTypeArgv) {
     const value = inputTypeArgv.slice("--input-type=".length)
     if (value === "module") {
@@ -43,7 +41,6 @@ const determineModuleSystem = (url, projectDirectoryUrl) => {
       return "cjs"
     }
   }
-
   const extension = urlToExtension(url)
   if (extension === ".cjs") {
     return "cjs"
@@ -51,7 +48,6 @@ const determineModuleSystem = (url, projectDirectoryUrl) => {
   if (extension === ".mjs") {
     return "esm"
   }
-
   const packageCandidates = getPackageCandidates(url, projectDirectoryUrl)
   const firstPackageFound = packageCandidates.find((packageRelativeUrl) => {
     const packageUrl = resolveUrl(packageRelativeUrl, projectDirectoryUrl)
@@ -60,7 +56,6 @@ const determineModuleSystem = (url, projectDirectoryUrl) => {
   if (!firstPackageFound) {
     return undefined
   }
-
   const packageUrl = resolveUrl(firstPackageFound, projectDirectoryUrl)
   const packageContent = readFileSync(urlToFileSystemPath(packageUrl))
   const packageData = JSON.parse(packageContent)
@@ -72,11 +67,9 @@ const determineModuleSystem = (url, projectDirectoryUrl) => {
 
 const getPackageCandidates = (fileUrl, projectDirectoryUrl) => {
   const fileDirectoryUrl = resolveUrl("./", fileUrl)
-
   if (fileDirectoryUrl === projectDirectoryUrl) {
     return [`package.json`]
   }
-
   const fileDirectoryRelativeUrl = urlToRelativeUrl(
     fileDirectoryUrl,
     projectDirectoryUrl,
@@ -85,14 +78,12 @@ const getPackageCandidates = (fileUrl, projectDirectoryUrl) => {
   const relativeDirectoryArray = fileDirectoryRelativeUrl.split("/")
   // remove the first empty string
   relativeDirectoryArray.shift()
-
   let i = relativeDirectoryArray.length
   while (i--) {
     candidates.push(
       `${relativeDirectoryArray.slice(0, i + 1).join("/")}/package.json`,
     )
   }
-
   return [...candidates, "package.json"]
 }
 

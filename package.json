@@ -43,7 +43,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@jsenv/filesystem": "2.7.0",
+    "@jsenv/filesystem": "2.7.1",
     "@jsenv/importmap": "1.2.0",
     "@jsenv/logger": "4.0.1"
   },

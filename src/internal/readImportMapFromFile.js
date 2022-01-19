@@ -16,7 +16,6 @@ export const readImportMapFromFile = ({
   if (typeof importMapFileRelativeUrl === "undefined") {
     return null
   }
-
   if (typeof importMapFileRelativeUrl !== "string") {
     throw new TypeError(
       `importMapFileRelativeUrl must be a string, got ${importMapFileRelativeUrl}`,
@@ -26,7 +25,6 @@ export const readImportMapFromFile = ({
     importMapFileRelativeUrl,
     projectDirectoryUrl,
   )
-
   if (!urlIsInsideOf(importMapFileUrl, projectDirectoryUrl)) {
     logger.warn(`import map file is outside project.
 --- import map file ---
@@ -34,7 +32,6 @@ ${urlToFileSystemPath(importMapFileUrl)}
 --- project directory ---
 ${urlToFileSystemPath(projectDirectoryUrl)}`)
   }
-
   let importMapFileBuffer
   const importMapFilePath = urlToFileSystemPath(importMapFileUrl)
   try {
@@ -46,7 +43,6 @@ ${urlToFileSystemPath(projectDirectoryUrl)}`)
     }
     throw e
   }
-
   let importMap
   try {
     const importMapFileString = String(importMapFileBuffer)
@@ -62,7 +58,6 @@ ${importMapFilePath}`)
     }
     throw e
   }
-
   return normalizeImportMap(importMap, importMapFileUrl)
 }
 

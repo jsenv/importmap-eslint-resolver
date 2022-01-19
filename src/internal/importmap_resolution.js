@@ -17,7 +17,6 @@ export const applyImportMapResolution = (
     projectDirectoryUrl,
     importMapFileRelativeUrl,
   })
-
   try {
     return resolveImport({
       specifier,
