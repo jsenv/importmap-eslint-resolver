@@ -17,10 +17,11 @@ await buildProject({
     "./main.js": "jsenv_importmap_eslint_resolver.cjs",
   },
   preservedUrls: {
-    // ensure this specific file is inlined
-    // otherhwise a .js would be required when would throw
-    // 'require() of ES modules is not supported'
-    "./node_modules/@jsenv/importmap/src/isSpecifierForNodeCoreModule.js": false,
+    // By default commonjs builds preserves all import to node_modules/*
+    // but here we want to ensure @jsenv/* files are inlined during the build so that
+    // "jsenv_importmap_eslint_resolver.cjs" do not try to require files containing import/export
+    // that whould throw "require() of ES modules is not supported"
+    "./node_modules/@jsenv/": false,
   },
   runtimeSupport: {
     node: "14.7.0",
